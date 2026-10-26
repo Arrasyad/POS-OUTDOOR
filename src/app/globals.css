@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+@theme {
+  --color-pine-green: #10b981;
+  --color-deep-amber: #f59e0b;
+  --color-dark-charcoal: #09090b;
+  --color-glass-border: rgba(255, 255, 255, 0.12);
+}
+
+/* ============================================================
+   LIQUID GLASS SYSTEM - iOS 26.5 Inspired
+   Ultra high-fidelity glassmorphism with layered light physics
+   ============================================================ */
+
+/* Base liquid glass — used for containers */
+@utility liquid-glass {
+  position: relative;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.055) 0%,
+      rgba(255, 255, 255, 0.018) 50%,
+      rgba(255, 255, 255, 0.035) 100%
+    );
+  backdrop-filter: blur(56px) saturate(220%) brightness(1.08);
+  -webkit-backdrop-filter: blur(56px) saturate(220%) brightness(1.08);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow:
+    /* Outer ambient glow */
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    /* Main depth shadow */
+    0 24px 64px rgba(0, 0, 0, 0.55),
+    0 8px 24px rgba(0, 0, 0, 0.35),
+    /* Inner highlight — top-left specular reflection */
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 1px 0 0 rgba(255, 255, 255, 0.08),
+    /* Inner bottom-right shadow (depth illusion) */
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+    inset -1px 0 0 rgba(0, 0, 0, 0.15);
+}
+
+
+/* Elevated card variant — slightly more opaque for product cards */
+@utility liquid-glass-card {
+  position: relative;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.02) 60%,
+      rgba(16, 185, 129, 0.025) 100%
+    );
+  backdrop-filter: blur(40px) saturate(180%) brightness(1.05);
+  -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(1.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  border-left: 1px solid rgba(255, 255, 255, 0.09);
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 12px 40px rgba(0, 0, 0, 0.45),
+    0 4px 12px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 1px 0 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Pill / tag variant — for navbars, badges, chips */
+@utility liquid-glass-pill {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0.015) 100%
+    );
+  backdrop-filter: blur(64px) saturate(300%) brightness(1.1);
+  -webkit-backdrop-filter: blur(64px) saturate(300%) brightness(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 16px 48px rgba(0, 0, 0, 0.6),
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 1px 0 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+:root {
+  --background: var(--color-dark-charcoal);
+  --foreground: #ededed;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-plus-jakarta-sans), 'Plus Jakarta Sans', Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Date input styling — force white text on dark background */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) opacity(0.4);
+  cursor: pointer;
+}
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-outer-spin-button {
+  display: none;
+}

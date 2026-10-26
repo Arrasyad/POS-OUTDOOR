@@ -1,0 +1,240 @@
+# 📄 PRODUCT REQUIREMENTS DOCUMENT (PRD)
+
+**Project Name:** Pos Outdoor - High-Fidelity Interactive Prototype
+
+
+**Project Type:** Frontend-Only Web Application (Mocked Backend) **Architecture:** 3-Level User Journey (Level 0, 1, 2) **Authentication:** No-Login System (Frictionless) 
+
+## 1. 🛠️ TECH STACK & CONFIGURATION (AI DIRECTIVES)
+
+AI harus diinstruksikan untuk menggunakan tumpukan teknologi berikut:
+
+* 
+**Framework:** Next.js 15 (App Router) + React 19. Gunakan SSR/SSG di mana memungkinkan.
+
+
+* 
+**Styling:** Tailwind CSS.
+
+
+* 
+**UI Components:** Radix UI / Shadcn UI.
+
+
+* 
+**Animations:** Framer Motion (untuk *micro-interactions*).
+
+
+* 
+**State Management:** Zustand (ukuran kecil, performa cepat).
+
+
+* 
+**Persistent Storage:** `LocalStorage` browser.
+
+
+* 
+**Utilities:** `uuid` (generator string unik), `jsbarcode` / `qrcode.react` (generator barcode).
+
+
+
+## 2. 🎨 UI/UX & STYLING SPECS (LIQUID GLASS / IOS STYLE)
+
+AI harus menerapkan pedoman desain berikut secara konsisten:
+
+* 
+**Layout Utama:** Pendekatan *Mobile-First* , menggunakan Bento Grid Layout.
+
+
+* 
+**Tipografi:** Sans-serif modern (Plus Jakarta Sans atau Inter).
+
+
+* **Warna Tema:**
+* Background: Putih bersih dan Abu-abu sangat muda.
+
+
+* Aksen/CTA: Hijau Forest (*Pine Green*) atau Jingga Gunung (*Deep Amber/Orange*).
+
+
+
+
+* 
+**Efek "Liquid Glass" (Glassmorphism):** Gunakan *class* Tailwind spesifik untuk elemen melayang (Bento box, Floating Cart, Sticky Headers): `bg-white/30 backdrop-blur-md border border-white/20 shadow-lg backdrop-saturate-[180%]`.
+
+
+
+---
+
+## 3. 🧠 MOCKING STRATEGY & GLOBAL STATE (ZUSTAND)
+
+Karena ini adalah prototipe tanpa *backend*, instruksikan AI untuk membuat struktur Zustand *store* berikut:
+
+### A. Static Data Mock (`productsMock.js`)
+
+* Berisi *array* objek alat (*id, name, price, stock, image*).
+
+
+
+### B. Global State Definitions
+
+1. 
+`cart`: Array item yang dipilih (disimpan ke `LocalStorage`).
+
+
+2. 
+`dateRange`: Tanggal `startDate` dan `endDate`.
+
+
+3. 
+`nightCount`: Integer hasil kalkulasi (`endDate` - `startDate`).
+
+
+4. 
+`userData`: Objek berisi `fullName` dan `whatsappNumber`.
+
+
+5. 
+`bookingStatus`: Status transaksi (idle, locked, paid, cancelled).
+
+
+
+---
+
+## 4. 🧭 ARCHITECTURAL FLOW (THE 3 LEVELS)
+
+### [LEVEL 0] - Landing Page & Smart Catalog
+
+**Tujuan:** Mengunci tanggal sewa, filter alat, kalkulasi harga, dan mengatur *cart*.
+
+* **Hero Section & Date Picker:**
+* Implementasikan UI kalender (Bento Box / Floating Card).
+
+
+* *Logic:* User wajib memilih rentang tanggal. Tanggal selesai tidak boleh sama dengan tanggal mulai (minimal 2 Hari 1 Malam / H+1).
+
+
+* 
+*Kalkulasi Harga:* Hitungan menggunakan basis "Per Malam" (`endDate - startDate`).
+
+
+
+
+* **Katalog Dinamis (Bento Grid):**
+* Tampilkan alat dengan harga per malam.
+
+
+* 
+*Mock Logic:* Saat tanggal dipilih, kurangi stok secara matematis di *state* agar terlihat seperti *real-time database*.
+
+
+* Indikator warna: Hijau (Tersedia), Abu-abu/Grayscale + Merah (Habis).
+
+
+* Animasi (Framer Motion): Tombol CTA menjadi `[-] 1 [+]` (Quantity Counter) saat diklik.
+
+
+
+
+* **Floating Mini Cart:**
+* Tombol melayang (`absolute bottom-right`).
+
+
+* Membuka menu laci samping (*Slide-Over* Shadcn UI) berisi rincian item, pengali malam, subtotal harga, dan tombol `Lanjut Isi Data Sewa`.
+
+
+
+
+
+### [LEVEL 1] - Instant Form & Verification
+
+**Tujuan:** Menangkap data pengguna (tanpa *login*) dan mengunci stok.
+
+* **Temporary Booking Lock:**
+* Saat halaman di- *load*, jalankan fungsi `setInterval` selama 15 menit (dimulai dari `14:59`).
+
+
+* Jika mencapai `00:00`, *redirect* user kembali ke Level 0 dan hapus *state*.
+
+
+
+
+* **Formulir Minimalis:**
+* Input `Nama Lengkap` (Wajib).
+
+
+* Input `Nomor WhatsApp` (Wajib, validasi format angka).
+
+
+* Input `Catatan Tambahan` (Opsional).
+
+
+* 
+*Penting:* Tidak ada fitur unggah dokumen KTP.
+
+
+
+
+* **Disclaimer Jaminan Fisik:**
+* Kotak peringatan visual yang menyatakan KTP fisik wajib dibawa dan ditinggal di toko.
+
+
+
+
+* **Sticky Order Summary:**
+* Menampilkan ringkasan tagihan. Tombol `Konfirmasi & Lanjut Pembayaran` hanya aktif setelah form diisi dan *checkbox* persetujuan dicentang.
+
+
+
+
+
+### [LEVEL 2] - Transaction & Digital Receipt
+
+**Tujuan:** Menyelesaikan pembayaran (Mock), membuat kode booking, dan *routing* ke WhatsApp.
+
+* **Phase A: Proses Pembayaran (Mocked Webhook)**
+* Tampilkan QRIS statis dan teruskan timer mundur dari Level 1.
+
+
+* 
+*AI Logic Directive:* Pasang fungsi `setTimeout` selama 5–7 detik secara asinkron. Setelah *timeout*, ubah state menjadi "Paid" dan ubah layar tanpa me- *refresh* halaman (*Real-time redirection*).
+
+
+
+
+* **Phase B: Nota Digital Sah**
+* Tampilkan indikator Sukses.
+
+
+* 
+*Barcode Generation:* Gunakan `uuid` untuk membuat nomor acak (misal: `#POS-[random]`) dan *render* menggunakan *library* Barcode.
+
+
+* Tampilkan tabel rincian penyewa dan pesanan.
+
+
+
+
+* **WhatsApp Integration Button:**
+* Tombol utama dengan *hyperlink*: `https://wa.me/[NomorToko]?text=[AutoGeneratedMessage]`.
+
+
+* Pesan memuat: Nama, Kode Booking, dan Link Nota (misal: `posoutdoor.com/receipt/POS-XXXXX`).
+
+
+
+
+* **Cancellation Flow (via WhatsApp):**
+* Tambahkan tombol sekunder `[ 🛑 Batal / Ubah Pesanan? [cite_start]]` di nota.
+
+
+* Tombol mengarahkan ke URL WhatsApp API untuk meminta *refund*.
+
+
+
+
+
+## 5. 🛠️ HIDDEN ADMIN FEATURES (FOR DEMO RESET)
+
+* 
+**Reset Demo:** Buat tombol tak terlihat atau berukuran kecil di pojok layar untuk mengeksekusi `localStorage.clear()` guna mengembalikan sistem ke kondisi awal untuk penguji baru.
